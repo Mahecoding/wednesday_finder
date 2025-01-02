@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Wednesday Date</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('https://images.unsplash.com/photo-1523380360198-653413ad178b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHVycGxlJTIwYmFja2dyb3VuZHxlbnwwfHwwfHx8MA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Poppins', Arial, sans-serif;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            position: absolute;
+            top: 8%;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 100%;
+            animation: backInDown 1.5s ease-in-out;
+        }
+
+        @keyframes backInDown {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(30px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            width: 80%;
+            max-width: 450px;
+            margin-top: 100px; 
+            animation: fadeIn 2s ease-in-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .rocket {
+            width: 100px;
+            margin-bottom: 20px;
+            animation: float 3s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 31px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 1em;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #f1c40f;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        button {
+            position: relative;
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5148d1;
+        }
+
+        button img {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            pointer-events: none;
+        }
+
+        .output {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .output-count {
+            font-size: 1em;
+            color: #1abc9c;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                font-size: 2em;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                width: 90%;
+                margin-top: 120px;
+                padding: 20px;
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Wednesday Finder</div>
+
+    <div class="container">
+        <img src="images/rocket.png" alt="Rocket" class="rocket">
+        <h1>Find Wednesday Date</h1>
+        <p class="description">This website helps you find the next Wednesday within a specific range.</p>
+        <input type="date" id="dateInput">
+        <br>
+        <button onclick="findWednesday()">
+            <img src="images/triangle.png" alt="Triangle">
+            Find Day
+        </button>
+        <div class="output" id="output"></div>
+        <div class="output-count" id="outputCount"></div>
+    </div>
+
+    <script>
+        function findWednesday() {
+            const inputDate = document.getElementById('dateInput').value;
+            const output = document.getElementById('output');
+            const outputCount = document.getElementById('outputCount');
+
+            if (!inputDate) {
+                output.textContent = "Please select a date.";
+                outputCount.textContent = "";
+                return;
+            }
+
+            const date = new Date(inputDate);
+            let count = 0;
+            let found = false;
+
+            // First search between 45 to 50 days
+            while (count < 50) {
+                date.setDate(date.getDate() + 1);
+                count++;
+
+                if (date.getDay() === 3 && count >= 45 && count <= 50) { // 3 = Wednesday
+                    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                    output.textContent = `The Wednesday is on ${formattedDate}`;
+                    outputCount.textContent = `${count} days from the selected date`;
+                    found = true;
+                    return;
+                }
+            }
+
+            // If not found, search between 40 to 50 days
+            if (!found) {
+                count = 0;
+                date.setTime(new Date(inputDate).getTime()); // Reset date to original input
+                while (count < 50) {
+                    date.setDate(date.getDate() + 1);
+                    count++;
+
+                    if (date.getDay() === 3 && count >= 40 && count <= 50) {
+                        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                        output.textContent = `The Wednesday is on ${formattedDate}`;
+                        outputCount.textContent = `${count} days from the selected date`;
+                        return;
+                    }
+                }
+            }
+
+            output.textContent = "Could not find a Wednesday within the required range.";
+            outputCount.textContent = "";
+        }
+    </script>
+</body>
+</html>
